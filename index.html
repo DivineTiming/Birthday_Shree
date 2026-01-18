@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Happy Birthday Shree! 🎉✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        :root{--p:#ff6b6b;--s:#fecfef;--bg:#ff9a9e;--g:#ffd700;--sh:rgba(0,0,0,.2)}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+        body{background:linear-gradient(135deg,var(--bg)0%,var(--s)50%,var(--s)100%);background-size:400% 400%;min-height:100vh;overflow-x:hidden;animation:bg 15s ease infinite;position:relative;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+        @keyframes bg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        
+        .hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+        .heart{position:absolute;color:var(--p);font-size:20px;animation:heartFloat 6s linear infinite;opacity:0;will-change:transform}
+        @keyframes heartFloat{0%{transform:translateY(100vh) rotate(0deg);opacity:1}100%{transform:translateY(-100px) rotate(360deg);opacity:0}}
+        
+        .sparkle{position:fixed;width:4px;height:4px;background:var(--g);border-radius:50%;pointer-events:none;z-index:2;animation:sparkle 3s linear infinite;will-change:transform}
+        @keyframes sparkle{0%{transform:translateY(100vh) scale(0);opacity:1}50%{opacity:1}100%{transform:translateY(-20px) scale(1);opacity:0}}
+        
+        .c{max-width:1400px;margin:0 auto 160px auto;padding:20px;position:relative;z-index:10;min-height:calc(100vh - 220px)}
+        
+        nav{position:fixed;top:env(safe-area-inset-top,20px);left:50%;transform:translateX(-50%);background:rgba(255,255,255,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 25px;border-radius:50px;box-shadow:0 8px 32px var(--sh);z-index:100;animation:sd 1s ease-out}
+        @keyframes sd{from{opacity:0;transform:translateX(-50%) translateY(-100%)}}
+        nav button{background:none;border:none;color:#fff;font-size:clamp(16px,4vw,18px);margin:0 10px;cursor:pointer;padding:12px 20px;border-radius:25px;transition:all .3s;font-weight:700;position:relative;overflow:hidden;min-height:48px;min-width:70px;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}
+        nav button:hover{background:rgba(255,255,255,.4);transform:scale(1.05)}
+        nav button.active{background:rgba(255,255,255,.6);box-shadow:0 0 20px rgba(255,255,255,.6)}
+        
+        section{display:none;min-height:100vh;padding-top:140px;padding-bottom:120px;opacity:0;transform:translateY(50px);transition:all .8s cubic-bezier(.25,.46,.45,.94)}
+        section.active{display:block;opacity:1;transform:translateY(0)}
+        
+        #gallery { padding-bottom: 220px; }
+        #wishes { padding-bottom: 160px; }
+        #games { padding-bottom: 180px; }
+        
+        .h{text-align:center;color:#fff;text-shadow:0 4px 12px var(--sh)}
+        .h h1{font-size:clamp(2.2rem,9vw,5.5rem);margin-bottom:20px;background:linear-gradient(45deg,#fff,var(--g),#fff);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:bounce 2s infinite,gradient 4s ease infinite;line-height:1.1}
+        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-30px)}60%{transform:translateY(-15px)}}
+        @keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        
+        .cd{display:flex;justify-content:center;gap:12px;font-size:clamp(1.1rem,4.5vw,2.2rem);margin:40px auto;flex-wrap:wrap;max-width:600px}
+        .cd>div{background:linear-gradient(145deg,rgba(255,255,255,.4),rgba(255,255,255,.2));padding:20px 15px;border-radius:25px;min-width:85px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);animation:pulse 2s infinite;flex:1;max-width:120px}
+        .cd span{font-size:clamp(1.6rem,7.5vw,3.2rem);display:block;font-weight:900;text-shadow:0 2px 10px var(--sh);color:#fff;line-height:1}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        
+        .m{font-size:clamp(1.2rem,4.5vw,1.9rem);margin:50px auto;max-width:900px;line-height:1.6;animation:fadeIn 2s ease;text-shadow:0 2px 10px var(--sh)}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}}
+        
+        .cake{position:absolute;top:20%;right:-10%;width:200px;height:180px;animation:float 6s ease-in-out infinite;z-index:5;opacity:.8}
+        .cake::before{content:'🎂';font-size:8rem;position:absolute}
+        @keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-20px)}}
+        
+        .cb{font-size:clamp(1.2rem,4vw,1.8rem);padding:22px 60px;border:none;border-radius:60px;background:linear-gradient(45deg,var(--p),#ff8e8e);color:#fff;cursor:pointer;transition:all .4s;font-weight:900;box-shadow:0 12px 35px rgba(255,107,107,.5);margin:30px auto;display:block;min-height:60px;min-width:280px;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}
+        .cb:hover{transform:translateY(-8px) scale(1.05);box-shadow:0 20px 50px rgba(255,107,107,.6)}
+        .cb:active{transform:translateY(-4px) scale(1.02)}
+        .cb.small{padding:15px 30px;font-size:clamp(1rem,3vw,1.2rem);min-height:50px;min-width:auto;margin:8px}
+        
+        .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding:30px 0}
+        .g img{width:100%;height:260px;object-fit:cover;border-radius:25px;box-shadow:0 15px 40px var(--sh);transition:all .6s;cursor:pointer;background:linear-gradient(45deg,var(--p),var(--s));touch-action:manipulation}
+        .g img:hover{transform:scale(1.08) translateY(-15px);box-shadow:0 25px 60px rgba(0,0,0,.4)}
+        .g img.error{background:linear-gradient(45deg,var(--p),var(--g));}
+        .g img.error::after{content:"Image Missing 💖";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-weight:900;font-size:1.3rem;text-align:center;padding:20px;background:rgba(0,0,0,.7);border-radius:15px;display:block}
+        
+        .w{max-width:900px;margin:0 auto;text-align:center}
+        .w>div{margin:25px 0;padding:30px;background:linear-gradient(145deg,rgba(255,255,255,.25),rgba(255,255,255,.15));border-radius:25px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);font-size:clamp(1.2rem,3vw,1.5rem);animation:slideUp 1s ease;box-shadow:0 15px 40px var(--sh)}
+        @keyframes slideUp{from{opacity:0;transform:translateY(40px)}}
+        
+        footer.f{padding:60px 20px 40px;text-align:center;color:#fff;opacity:.95;font-size:clamp(1.1rem,2.5vw,1.3rem);background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.05));backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:25px;margin:40px auto;border:1px solid rgba(255,255,255,.2);width:90%;max-width:600px}
+        
+        #si{text-align:center;margin:70px 0;padding:50px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.1));border-radius:40px;backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);box-shadow:0 20px 60px var(--sh)}
+        #si input{padding:20px 30px;font-size:clamp(18px,4vw,20px);border-radius:35px;border:2px solid rgba(255,255,255,.4);width:min(90vw,400px);background:rgba(255,255,255,.98);box-shadow:0 10px 35px var(--sh);transition:all .3s;margin-bottom:20px}
+        #si input:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 4px rgba(255,215,0,.3)}
+        #si button{padding:20px 45px;font-size:clamp(18px,4vw,20px);background:linear-gradient(45deg,var(--g),#ffed4a);color:#333;border:none;border-radius:35px;cursor:pointer;transition:all .4s;font-weight:900;box-shadow:0 10px 35px rgba(255,215,0,.5);min-height:60px;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}
+        #si button:hover{transform:translateY(-5px);box-shadow:0 18px 50px rgba(255,215,0,.7)}
+        
+        .sg{margin-top:50px;padding-bottom:100px}
+        .sg h3{color:var(--g);text-align:center;margin-bottom:40px;font-size:clamp(2rem,6vw,2.8rem);animation:glow 2s infinite}
+        @keyframes glow{0%,100%{text-shadow:0 0 20px var(--g)}50%{text-shadow:0 0 40px var(--g)}}
+        
+        .st{text-align:center;color:#fff;font-size:clamp(2rem,8vw,3.5rem);margin-bottom:50px;text-shadow:0 6px 20px var(--sh);background:linear-gradient(45deg,#fff,var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient 3s ease infinite}
+        
+        .md{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:1000;cursor:pointer}
+        .md img{max-width:95%;max-height:95%;border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.9)}
+        
+        /* iPhone 13 Pro Max Optimized (428px viewport) */
+        @media screen and (max-width:430px) and (min-width:425px) {
+            .h h1{font-size:5rem !important;line-height:1;}
+            .cd{gap:8px;justify-content:center;}
+            .cd>div{flex:1 0 80px;padding:18px 12px;}
+            .cb{width:95vw;padding:25px 40px;}
+            .g{grid-template-columns:1fr 1fr;gap:15px;}
+            nav button{font-size:16px;padding:10px 16px;margin:0 6px;}
+        }
+        
+        @media (max-width:768px){nav{padding:10px 20px}nav button{font-size:16px;margin:0 8px;min-height:44px}.cd{gap:8px}.cd>div{padding:15px 12px;min-width:75px}.cake{display:none}.g{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}}
+        @media (max-width:480px){.c{padding:15px 10px}#si button{width:min(90vw,380px);margin:15px auto 0;display:block}#si input{width:85vw}}
+        
+        /* Games Section */
+        .games-grid{display:grid;gap:30px;max-width:900px;margin:0 auto;padding:40px 20px;}
+        .game-card{background:linear-gradient(145deg,rgba(255,255,255,.25),rgba(255,255,255,.15));padding:30px;border-radius:25px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 15px 40px var(--sh);text-align:center;}
+        .game-title{color:var(--g);margin-bottom:25px;font-size:clamp(1.5rem,5vw,2rem);font-weight:900;}
+        #memoryGame{width:100%;max-width:400px;height:300px;border-radius:20px;background:#fff;box-shadow:0 15px 40px var(--sh);cursor:pointer;touch-action:manipulation;}
+        #quizScore, #memoryScore{color:#ffd700;font-size:clamp(1.2rem,3vw,1.4rem);font-weight:900;margin-top:15px;}
+        .reset-games{margin:20px auto !important;font-size:1.1rem !important;}
+        .share-btn{margin:20px auto !important;font-size:1rem !important;padding:15px 30px !important;}
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <div id="sparkles"></div>
+    <div class="cake"></div>
+
+    <nav>
+        <button onclick="showSection('home')" class="active" data-section="home">🏠 Home</button>
+        <button onclick="showSection('gallery')" data-section="gallery">📸 Gallery</button>
+        <button onclick="showSection('wishes')" data-section="wishes">💖 Wishes</button>
+        <button onclick="showSection('games')" data-section="games">🎮 Games</button>
+    </nav>
+    
+    <div class="c">
+        <section id="home" class="active">
+            <div class="h">
+                <h1>Happy Birthday, Shree! 🎂✨</h1>
+                <p class="m">Wishing you a year filled with joy, success, and togetherness. You make my world brighter! I Love You! 💕</p>
+                <div id="countdown" class="cd"></div>
+                <button class="cb" onclick="triggerConfetti()">Let's Celebrate! 🎊</button>
+                <button class="cb share-btn" onclick="shareBirthday()">📱 Share Birthday Love</button>
+            </div>
+        </section>
+        
+        <section id="gallery">
+            <h2 class="st">Our Beautiful Memories 📸</h2>
+            <h3 style="color:#fff;text-align:center;margin-bottom:25px;font-size:clamp(1.6rem,4vw,1.9rem);font-weight:900;text-shadow:0 4px 15px var(--sh)">✨ (28 Special Moments) ✨</h3>
+            
+            <div class="g" id="public-gallery"></div>
+            
+            <div id="secret-input">
+                <div id="si">
+                    <input type="password" id="secret-code" placeholder="🔐 Enter Secret Code...">
+                    <button onclick="unlockSecret()">Unlock Secret Gallery 🔓</button>
+                </div>
+            </div>
+            
+            <div id="secret-gallery" class="sg" style="display:none">
+                <h3>💎 Secret Memories (Only for Shree) 💎</h3>
+                <div class="g">
+                    <img src="images/memory39.jpg" alt="Secret Memory 1" onclick="openModal(this)" loading="lazy">
+                    <img src="images/memory40.jpg" alt="Secret Memory 2" onclick="openModal(this)" loading="lazy">
+                </div>
+            </div>
+        </section>
+        
+        <section id="wishes">
+            <h2 class="st">Special Wishes for Shree 💖</h2>
+            <div class="w">
+                <div>🌟 May all your dreams come true this year!</div>
+                <div>🥳 Health, happiness, and endless adventures await!</div>
+                <div>✨ You're amazing, Shree. Keep shining bright!</div>
+                <div>💕 Here's to many more beautiful memories together!</div>
+            </div>
+        </section>
+        
+        <section id="games">
+            <h2 class="st">Birthday Fun Games! 🎮</h2>
+            <div class="games-grid">
+                <div class="game-card">
+                    <h3 class="game-title">🧠 Memory Match</h3>
+                    <canvas id="memoryGame"></canvas>
+                    <p id="memoryScore">Score: 0</p>
+                </div>
+                <div class="game-card">
+                    <h3 class="game-title">❓ Shree Trivia</h3>
+                    <div id="quizContainer">
+                        <div id="quizGame">
+                            <p id="quizQuestion" style="color:#fff;font-size:clamp(1.3rem,4vw,1.5rem);margin-bottom:25px;">Click Reset or navigate away and back to start!</p>
+                            <button id="quizBtn1" class="cb small" style="margin:8px;">Option 1</button>
+                            <button id="quizBtn2" class="cb small" style="margin:8px;">Option 2</button>
+                        </div>
+                    </div>
+                    <p id="quizScore">Score: 0/5</p>
+                </div>
+            </div>
+            <button class="cb reset-games" id="resetBtn">🔄 Reset Games</button>
+        </section>
+    </div>
+    
+    <footer class="f">Handcrafted with ❤️ for Shree ✨</footer>
+
+    <script>
+        const BIRTHDAY_DATE = new Date('2026-01-27T00:00:00+05:30');
+        const SECRET_CODE = 'shree2026';
+        
+        // Game state variables - properly scoped
+        let memoryScore = 0;
+        let quizCurrent = 0;
+        let quizScore = 0;
+        let memoryFlipped = [];
+        let memoryCanvas, memoryCtx, memoryBoard, memoryGameCards;
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(button => button.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            if (sectionId === 'home') triggerConfetti();
+            if (sectionId === 'games') {
+                setTimeout(initGames, 100); // Small delay to ensure DOM is ready
+            }
+        }
+        
+        function createGallery() {
+            const publicGallery = document.getElementById('public-gallery');
+            for(let i = 1; i <= 28; i++) {
+                const img = document.createElement('img');
+                img.src = `images/memory${i}.jpg`;
+                img.alt = `Memory ${i}`;
+                img.loading = 'lazy';
+                img.onclick = (e) => openModal(e.target);
+                img.onerror = () => img.classList.add('error');
+                publicGallery.appendChild(img);
+            }
+        }
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = BIRTHDAY_DATE - now;
+            const countdownEl = document.getElementById('countdown');
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                countdownEl.innerHTML = `<div><span>${days}</span>Days</div><div><span>${hours}</span>Hours</div><div><span>${minutes}</span>Mins</div><div><span>${seconds}</span>Secs</div>`;
+            } else {
+                countdownEl.innerHTML = '<div style="font-size:clamp(2.5rem,10vw,4rem);color:#ffd700;padding:50px;font-weight:900">🎉 IT\'S BIRTHDAY TIME! 🎉</div>';
+            }
+        }
+        
+        function triggerConfetti() {
+            confetti({particleCount: 150, spread: 70, origin: { y: 0.6 }});
+            setTimeout(() => confetti({particleCount: 120, angle: 60, spread: 55, origin: { x: 0 }}), 250);
+            setTimeout(() => confetti({particleCount: 120, angle: 120, spread: 55, origin: { x: 1 }}), 500);
+        }
+        
+        function shareBirthday() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Happy Birthday Shree! 🎉',
+                    text: 'Check out this amazing birthday surprise! 💖',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('🎉 Birthday link copied to clipboard! Share the love! 💕');
+                }).catch(() => {
+                    alert('🎉 Birthday link: ' + window.location.href + '\nShare the love! 💕');
+                });
+            }
+        }
+        
+        function unlockSecret() {
+            const input = document.getElementById('secret-code');
+            if (input.value === SECRET_CODE) {
+                document.getElementById('secret-gallery').style.display = 'block';
+                document.getElementById('secret-input').style.display = 'none';
+                triggerConfetti();
+                setTimeout(() => document.getElementById('secret-gallery').scrollIntoView({behavior: 'smooth'}), 500);
+            } else {
+                input.value = '';
+                input.focus();
+                input.style.borderColor = '#ff6b6b';
+                setTimeout(() => input.style.borderColor = 'rgba(255,255,255,.4)', 1000);
+                alert('❌ Wrong code! Try: shree2026 💕');
+            }
+        }
+        
+        function openModal(img) {
+            const modal = document.createElement('div');
+            modal.className = 'md';
+            modal.innerHTML = `<img src="${img.src}" alt="${img.alt}">`;
+            modal.onclick = () => modal.remove();
+            document.body.appendChild(modal);
+            triggerConfetti();
+        }
+        
+        // FIXED Memory Game with proper state management
+        function initMemoryGame() {
+            memoryCanvas = document.getElementById('memoryGame');
+            memoryCtx = memoryCanvas.getContext('2d');
+            memoryCanvas.width = 400;
+            memoryCanvas.height = 300;
+            
+            const cards = ['🎂','🎁','🎈','🎉','💖','✨','🌟','🍰'];
+            memoryGameCards = [...cards, ...cards].sort(() => Math.random() - 0.5);
+            memoryBoard = memoryGameCards.map(() => ({flipped: false, matched: false}));
+            memoryFlipped = [];
+            memoryScore = 0;
+            
+            function drawCard(x, y, width, height, emoji, flipped, matched) {
+                memoryCtx.save();
+                memoryCtx.fillStyle = matched ? '#ffd700' : (flipped ? '#fff' : '#ff6b6b');
+                memoryCtx.fillRect(x, y, width, height);
+                
+                // Rounded corners
+                memoryCtx.lineWidth = 3;
+                memoryCtx.strokeStyle = '#fff';
+                memoryCtx.beginPath();
+                memoryCtx.moveTo(x+12, y);
+                memoryCtx.lineTo(x+width-12, y);
+                memoryCtx.quadraticCurveTo(x+width, y, x+width, y+12);
+                memoryCtx.lineTo(x+width, y+height-12);
+                memoryCtx.quadraticCurveTo(x+width, y+height, x+width-12, y+height);
+                memoryCtx.lineTo(x+12, y+height);
+                memoryCtx.quadraticCurveTo(x, y+height, x, y+height-12);
+                memoryCtx.lineTo(x, y+12);
+                memoryCtx.quadraticCurveTo(x, y, x+12, y);
+                memoryCtx.stroke();
+                
+                if (flipped || matched) {
+                    memoryCtx.font = 'bold 36px Arial';
+                    memoryCtx.fillStyle = '#ff6b6b';
+                    memoryCtx.textAlign = 'center';
+                    memoryCtx.textBaseline = 'middle';
+                    memoryCtx.fillText(emoji, x + width/2, y + height/2);
+                }
+                memoryCtx.restore();
+            }
+            
+            function drawBoard() {
+                memoryCtx.clearRect(0, 0, 400, 300);
+                for(let i = 0; i < 16; i++) {
+                    const x = (i % 4) * 98 + 6;
+                    const y = Math.floor(i / 4) * 73 + 6;
+                    drawCard(x, y, 92, 67, memoryGameCards[i], memoryBoard[i].flipped, memoryBoard[i].matched);
+                }
+            }
+            
+            memoryCanvas.onclick = (e) => {
+                const rect = memoryCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const col = Math.floor(x / 100);
+                const row = Math.floor(y / 75);
+                const idx = row * 4 + col;
+                
+                if (idx >= 0 && idx < 16 && !memoryBoard[idx].flipped && !memoryBoard[idx].matched && memoryFlipped.length < 2) {
+                    memoryBoard[idx].flipped = true;
+                    memoryFlipped.push(idx);
+                    drawBoard();
+                    
+                    if (memoryFlipped.length === 2) {
+                        setTimeout(() => {
+                            const idx1 = memoryFlipped[0];
+                            const idx2 = memoryFlipped[1];
+                            if (memoryGameCards[idx1] === memoryGameCards[idx2]) {
+                                memoryBoard[idx1].matched = true;
+                                memoryBoard[idx2].matched = true;
+                                memoryScore += 10;
+                                document.getElementById('memoryScore').textContent = `Score: ${memoryScore}`;
+                                if (memoryScore >= 80) triggerConfetti();
+                            } else {
+                                memoryBoard[idx1].flipped = false;
+                                memoryBoard[idx2].flipped = false;
+                            }
+                            memoryFlipped = [];
+                            drawBoard();
+                        }, 1200);
+                    }
+                }
+            };
+            drawBoard();
+            document.getElementById('memoryScore').textContent = `Score: ${memoryScore}`;
+        }
+        
+        // FIXED Quiz Game with proper event management
+        const quizQuestions = [
+            {q: "Do you love me?", o1: "Yes 💕", o2: "No", a: 0},
+            {q: "What's your favorite ice cream flavor?", o1: "Chocolate", o2: "Vanilla", a: 1},
+            {q: "Best birthday gift ever?", o1: "Your love", o2: "iPhone", a: 0},
+            {q: "Shree's dream destination?", o1: "Paris", o2: "Maldives", a: 0},
+            {q: "Puchur birth time?", o1: "Morning", o2: "Night", a: 1}
+        ];
+        
+        function initQuiz() {
+            quizCurrent = 0;
+            quizScore = 0;
+            document.getElementById('quizScore').textContent = 'Score: 0/5';
+            
+            const quizGame = document.getElementById('quizGame');
+            quizGame.innerHTML = `
+                <p id="quizQuestion" style="color:#fff;font-size:clamp(1.3rem,4vw,1.5rem);margin-bottom:25px;">${quizQuestions[0].q}</p>
+                <button id="quizBtn1" class="cb small" style="margin:8px;">${quizQuestions[0].o1}</button>
+                <button id="quizBtn2" class="cb small" style="margin:8px;">${quizQuestions[0].o2}</button>
+            `;
+            
+            document.getElementById('quizBtn1').onclick = () => quizAnswer(0);
+            document.getElementById('quizBtn2').onclick = () => quizAnswer(1);
+        }
+        
+        function quizAnswer(selected) {
+            if(selected === quizQuestions[quizCurrent].a) {
+                quizScore++;
+                triggerConfetti();
+            }
+            quizCurrent++;
+            document.getElementById('quizScore').textContent = `Score: ${quizScore}/${quizCurrent}`;
+            
+            if(quizCurrent < 5) {
+                const quizGame = document.getElementById('quizGame');
+                quizGame.innerHTML = `
+                    <p id="quizQuestion" style="color:#fff;font-size:clamp(1.3rem,4vw,1.5rem);margin-bottom:25px;">${quizQuestions[quizCurrent].q}</p>
+                    <button id="quizBtn1" class="cb small" style="margin:8px;">${quizQuestions[quizCurrent].o1}</button>
+                    <button id="quizBtn2" class="cb small" style="margin:8px;">${quizQuestions[quizCurrent].o2}</button>
+                `;
+                document.getElementById('quizBtn1').onclick = () => quizAnswer(0);
+                document.getElementById('quizBtn2').onclick = () => quizAnswer(1);
+            } else {
+                const message = quizScore >= 4 ? '💖 Perfect! You know me so well! 💕' : 
+                               quizScore >= 3 ? '🌟 Great job! 🎉' : '💕 Sweet effort! Try again!';
+                document.getElementById('quizGame').innerHTML = `
+                    <h3 style="color:var(--g);font-size:clamp(1.5rem,5vw,2rem);">${message}</h3>
+                    <p style="color:#fff;font-size:1.3rem;margin:20px 0;">Final Score: ${quizScore}/5 ⭐</p>
+                    <button class="cb small" onclick="initQuiz()" style="margin-top:20px;">Play Again 💖</button>
+                `;
+            }
+        }
+        
+        // FIXED Reset Function - Now works perfectly!
+        function resetGames() {
+            memoryScore = 0;
+            quizCurrent = 0;
+            quizScore = 0;
+            memoryFlipped = [];
+            
+            document.getElementById('memoryScore').textContent = 'Score: 0';
+            document.getElementById('quizScore').textContent = 'Score: 0/5';
+            
+            initMemoryGame();
+            initQuiz();
+            triggerConfetti();
+        }
+        
+        function initGames() {
+            initMemoryGame();
+            initQuiz();
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('resetBtn').addEventListener('click', resetGames);
+        });
+        
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '💖';
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (5 + Math.random() * 3) + 's';
+            heart.style.fontSize = (15 + Math.random() * 15) + 'px';
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 9000);
+        }
+        
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+            document.getElementById('sparkles').appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 4000);
+        }
+        
+        window.addEventListener('load', function() {
+            createGallery();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            setInterval(createHeart, 300);
+            setInterval(createSparkle, 500);
+            
+            document.getElementById('secret-code').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') unlockSecret();
+            });
+        });
+    </script>
+</body>
+</html>
