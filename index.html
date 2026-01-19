@@ -5,11 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Happy Birthday Shree! 🎉✨</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <link rel="manifest" href="data:application/manifest+json,{
+      'name': 'Happy Birthday Shree! 🎉',
+      'short_name': 'ShreeBday',
+      'icons': [{
+        'src': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9Ijk2IiBmaWxsPSIjZmY2YjZiIi8+CjxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9IjgwIiBmaWxsPSIjZmZjZmVmIi8+Cjx0ZXh0IHg9Ijk2IiB5PSIxMDIiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI2MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZjZiNmIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DPC90ZXh0Pgo8L3N2Zz4K',
+        'sizes': '192x192',
+        'type': 'image/png'
+      }],
+      'theme_color': '#ff6b6b',
+      'background_color': '#ff9a9e',
+      'display': 'standalone'
+    }">
+    <meta name="theme-color" content="#ff6b6b">
     <style>
-        :root{--p:#ff6b6b;--s:#fecfef;--bg:#ff9a9e;--g:#ffd700;--sh:rgba(0,0,0,.2)}
+        :root{--p:#ff6b6b;--s:#fecfef;--bg:#ff9a9e;--g:#ffd700;--sh:rgba(0,0,0,.2);--lock:#ff4444}
         *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
         body{background:linear-gradient(135deg,var(--bg)0%,var(--s)50%,var(--s)100%);background-size:400% 400%;min-height:100vh;overflow-x:hidden;animation:bg 15s ease infinite;position:relative;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
         @keyframes bg{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        
+        .music-toggle{position:fixed;top:20px;right:20px;z-index:9999;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.9);border:none;font-size:1.5rem;cursor:pointer;backdrop-filter:blur(20px);box-shadow:0 8px 32px var(--sh);transition:all .3s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+        .music-toggle:hover{transform:scale(1.1);background:white}
+        .music-toggle.playing{background:linear-gradient(45deg,var(--g),#ffed4a);animation:pulse 1.5s infinite}
+        .music-toggle.music-hover{background:linear-gradient(45deg, var(--g), #ffed4a) !important;}
+        .music-toggle:active{transform:scale(0.95)}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+        .locked-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,var(--lock),#ff6666);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;border-radius:25px;backdrop-filter:blur(10px);animation:pulseLock 2s infinite;text-align:center;color:white}
+        .lock-icon{font-size:clamp(4rem,15vw,8rem);margin-bottom:20px;animation:bounce 1.5s infinite}
+        .lock-message{font-size:clamp(1.3rem,5vw,2rem);font-weight:900;text-shadow:0 4px 15px rgba(0,0,0,.5);margin-bottom:30px}
+        @keyframes pulseLock{0%,100%{transform:scale(1);box-shadow:0 0 30px rgba(255,68,68,.8)}50%{transform:scale(1.02);box-shadow:0 0 50px rgba(255,68,68,1)}}
+        section.locked{pointer-events:none}
+        section.locked::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:999}
         
         .hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
         .heart{position:absolute;color:var(--p);font-size:20px;animation:heartFloat 6s linear infinite;opacity:0;will-change:transform}
@@ -18,6 +45,9 @@
         .sparkle{position:fixed;width:4px;height:4px;background:var(--g);border-radius:50%;pointer-events:none;z-index:2;animation:sparkle 3s linear infinite;will-change:transform}
         @keyframes sparkle{0%{transform:translateY(100vh) scale(0);opacity:1}50%{opacity:1}100%{transform:translateY(-20px) scale(1);opacity:0}}
         
+        .achievement-badge{position:fixed;top:20px;left:20px;z-index:9998;background:linear-gradient(45deg,var(--g),#ffed4a);padding:15px 25px;border-radius:50px;box-shadow:0 10px 40px rgba(255,215,0,.6);color:#333;font-weight:900;font-size:1.1rem;transform:scale(0);animation:achievementPop 0.6s cubic-bezier(.68,-0.55,.265,1.55) forwards;backdrop-filter:blur(20px)}
+        @keyframes achievementPop{0%{transform:scale(0) rotate(-180deg)}50%{transform:scale(1.2) rotate(20deg)}100%{transform:scale(1) rotate(0deg)}}
+        
         .c{max-width:1400px;margin:0 auto 160px auto;padding:20px;position:relative;z-index:10;min-height:calc(100vh - 220px)}
         
         nav{position:fixed;top:env(safe-area-inset-top,20px);left:50%;transform:translateX(-50%);background:rgba(255,255,255,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:12px 25px;border-radius:50px;box-shadow:0 8px 32px var(--sh);z-index:100;animation:sd 1s ease-out}
@@ -25,9 +55,11 @@
         nav button{background:none;border:none;color:#fff;font-size:clamp(16px,4vw,18px);margin:0 10px;cursor:pointer;padding:12px 20px;border-radius:25px;transition:all .3s;font-weight:700;position:relative;overflow:hidden;min-height:48px;min-width:70px;-webkit-appearance:none;-webkit-tap-highlight-color:transparent}
         nav button:hover{background:rgba(255,255,255,.4);transform:scale(1.05)}
         nav button.active{background:rgba(255,255,255,.6);box-shadow:0 0 20px rgba(255,255,255,.6)}
+        nav button.locked{opacity:.5;cursor:not-allowed;transform:none!important}
+        nav button.locked:hover{background:none;transform:none}
         
-        section{display:none;min-height:100vh;padding-top:140px;padding-bottom:120px;opacity:0;transform:translateY(50px);transition:all .8s cubic-bezier(.25,.46,.45,.94)}
-        section.active{display:block;opacity:1;transform:translateY(0)}
+        section{display:none;min-height:100vh;padding-top:140px;padding-bottom:120px;opacity:0;transform:translateY(50px);transition:all .8s cubic-bezier(.25,.46,.45,.94);scroll-margin-top:140px}
+        section.active{display:block;opacity:1;transform:translateY(0);scroll-snap-align:start}
         
         #gallery { padding-bottom: 220px; }
         #wishes { padding-bottom: 160px; }
@@ -41,7 +73,6 @@
         .cd{display:flex;justify-content:center;gap:12px;font-size:clamp(1.1rem,4.5vw,2.2rem);margin:40px auto;flex-wrap:wrap;max-width:600px}
         .cd>div{background:linear-gradient(145deg,rgba(255,255,255,.4),rgba(255,255,255,.2));padding:20px 15px;border-radius:25px;min-width:85px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);animation:pulse 2s infinite;flex:1;max-width:120px}
         .cd span{font-size:clamp(1.6rem,7.5vw,3.2rem);display:block;font-weight:900;text-shadow:0 2px 10px var(--sh);color:#fff;line-height:1}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
         
         .m{font-size:clamp(1.2rem,4.5vw,1.9rem);margin:50px auto;max-width:900px;line-height:1.6;animation:fadeIn 2s ease;text-shadow:0 2px 10px var(--sh)}
         @keyframes fadeIn{from{opacity:0;transform:translateY(30px)}}
@@ -82,7 +113,20 @@
         .md{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:1000;cursor:pointer}
         .md img{max-width:95%;max-height:95%;border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.9)}
         
-        /* iPhone 13 Pro Max Optimized (428px viewport) */
+        .games-grid{display:grid;gap:30px;max-width:900px;margin:0 auto;padding:40px 20px;}
+        .game-card{background:linear-gradient(145deg,rgba(255,255,255,.25),rgba(255,255,255,.15));padding:30px;border-radius:25px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 15px 40px var(--sh);text-align:center;}
+        .game-title{color:var(--g);margin-bottom:25px;font-size:clamp(1.5rem,5vw,2rem);font-weight:900;}
+        #memoryGame{width:100%;max-width:400px;height:300px;border-radius:20px;background:#fff;box-shadow:0 15px 40px var(--sh);cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+        #quizScore, #memoryScore{color:#ffd700;font-size:clamp(1.2rem,3vw,1.4rem);font-weight:900;margin-top:15px;}
+        .reset-games{margin:20px auto !important;font-size:1.1rem !important;}
+        .share-btn{margin:20px auto !important;font-size:1rem !important;padding:15px 30px !important;}
+        
+        #achievements{text-align:center;margin:40px 0;padding:30px;background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.1));border-radius:40px;backdrop-filter:blur(25px);box-shadow:0 20px 60px var(--sh);display:none}
+        #achievements h3{color:var(--g);margin-bottom:25px;font-size:clamp(1.8rem,5vw,2.2rem)}
+        .badge-list{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
+        .badge{background:linear-gradient(45deg,var(--g),#ffed4a);padding:12px 20px;border-radius:25px;font-weight:900;color:#333;box-shadow:0 8px 25px rgba(255,215,0,.4);animation:badgeGlow 2s infinite alternate;}
+        @keyframes badgeGlow{0%{box-shadow:0 8px 25px rgba(255,215,0,.4)}100%{box-shadow:0 12px 35px rgba(255,215,0,.7)}}
+        
         @media screen and (max-width:430px) and (min-width:425px) {
             .h h1{font-size:5rem !important;line-height:1;}
             .cd{gap:8px;justify-content:center;}
@@ -91,30 +135,22 @@
             .g{grid-template-columns:1fr 1fr;gap:15px;}
             nav button{font-size:16px;padding:10px 16px;margin:0 6px;}
         }
-        
         @media (max-width:768px){nav{padding:10px 20px}nav button{font-size:16px;margin:0 8px;min-height:44px}.cd{gap:8px}.cd>div{padding:15px 12px;min-width:75px}.cake{display:none}.g{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:15px}}
         @media (max-width:480px){.c{padding:15px 10px}#si button{width:min(90vw,380px);margin:15px auto 0;display:block}#si input{width:85vw}}
-        
-        /* Games Section */
-        .games-grid{display:grid;gap:30px;max-width:900px;margin:0 auto;padding:40px 20px;}
-        .game-card{background:linear-gradient(145deg,rgba(255,255,255,.25),rgba(255,255,255,.15));padding:30px;border-radius:25px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 15px 40px var(--sh);text-align:center;}
-        .game-title{color:var(--g);margin-bottom:25px;font-size:clamp(1.5rem,5vw,2rem);font-weight:900;}
-        #memoryGame{width:100%;max-width:400px;height:300px;border-radius:20px;background:#fff;box-shadow:0 15px 40px var(--sh);cursor:pointer;touch-action:manipulation;}
-        #quizScore, #memoryScore{color:#ffd700;font-size:clamp(1.2rem,3vw,1.4rem);font-weight:900;margin-top:15px;}
-        .reset-games{margin:20px auto !important;font-size:1.1rem !important;}
-        .share-btn{margin:20px auto !important;font-size:1rem !important;padding:15px 30px !important;}
     </style>
 </head>
 <body>
+    <button class="music-toggle" id="musicToggle" title="Toggle Birthday Music">🎵</button>
+    
     <div class="hearts" id="hearts"></div>
     <div id="sparkles"></div>
     <div class="cake"></div>
 
     <nav>
         <button onclick="showSection('home')" class="active" data-section="home">🏠 Home</button>
-        <button onclick="showSection('gallery')" data-section="gallery">📸 Gallery</button>
-        <button onclick="showSection('wishes')" data-section="wishes">💖 Wishes</button>
-        <button onclick="showSection('games')" data-section="games">🎮 Games</button>
+        <button onclick="showSection('gallery')" data-section="gallery" id="galleryBtn">📸 Gallery</button>
+        <button onclick="showSection('wishes')" data-section="wishes" id="wishesBtn">💖 Wishes</button>
+        <button onclick="showSection('games')" data-section="games" id="gamesBtn">🎮 Games</button>
     </nav>
     
     <div class="c">
@@ -131,16 +167,13 @@
         <section id="gallery">
             <h2 class="st">Our Beautiful Memories 📸</h2>
             <h3 style="color:#fff;text-align:center;margin-bottom:25px;font-size:clamp(1.6rem,4vw,1.9rem);font-weight:900;text-shadow:0 4px 15px var(--sh)">✨ (28 Special Moments) ✨</h3>
-            
             <div class="g" id="public-gallery"></div>
-            
             <div id="secret-input">
                 <div id="si">
                     <input type="password" id="secret-code" placeholder="🔐 Enter Secret Code...">
                     <button onclick="unlockSecret()">Unlock Secret Gallery 🔓</button>
                 </div>
             </div>
-            
             <div id="secret-gallery" class="sg" style="display:none">
                 <h3>💎 Secret Memories (Only for Shree) 💎</h3>
                 <div class="g">
@@ -177,35 +210,294 @@
                             <button id="quizBtn2" class="cb small" style="margin:8px;">Option 2</button>
                         </div>
                     </div>
-                    <p id="quizScore">Score: 0/5</p>
+                    <p id="quizScore">Score: 0/8</p>
                 </div>
             </div>
             <button class="cb reset-games" id="resetBtn">🔄 Reset Games</button>
+            
+            <!-- NEW ACHIEVEMENTS SECTION -->
+            <div id="achievements">
+                <h3>🏆 Birthday Achievements Unlocked!</h3>
+                <div id="badgeList" class="badge-list"></div>
+            </div>
         </section>
     </div>
     
-    <footer class="f">Handcrafted with ❤️ for Shree ✨</footer>
+    <footer class="f">Handcrafted with ❤️ for Shree ✨ | From Pikai 💕 | PWA Ready 🎉</footer>
 
     <script>
         const BIRTHDAY_DATE = new Date('2026-01-27T00:00:00+05:30');
         const SECRET_CODE = 'shree2026';
+        const partyMelody = [
+            {freq: 523.25, dur: 200}, {freq: 659.25, dur: 200}, {freq: 784.00, dur: 400},
+            {freq: 659.25, dur: 200}, {freq: 523.25, dur: 200}, {freq: 392.00, dur: 400},
+            {freq: 294.00, dur: 300}, {freq: 294.00, dur: 300}, {freq: 330.00, dur: 600}, 
+            {freq: 262.00, dur: 600}, {freq: 392.00, dur: 600}, {freq: 349.00, dur: 1200}
+        ];
         
-        // Game state variables - properly scoped
+        // Game state variables
         let memoryScore = 0;
         let quizCurrent = 0;
         let quizScore = 0;
         let memoryFlipped = [];
         let memoryCanvas, memoryCtx, memoryBoard, memoryGameCards;
+        let musicPlayingTime = 0;
+        let musicStarted = false;
+        let achievements = {
+            musicMaster: false,
+            memoryChamp: false,
+            triviaQueen: false,
+            secretUnlocked: false
+        };
         
-        function showSection(sectionId) {
+        // 🎵 FIXED MUSIC SYSTEM - Browser Autoplay Policy Compliant
+        const musicToggle = document.getElementById('musicToggle');
+        let currentTimeout = null;
+        let oscillators = [];
+        let audioContext = null;
+
+        // Resume AudioContext on FIRST user interaction (fixes autoplay policy)
+        document.addEventListener('click', function firstClickHandler() {
+            if (!musicStarted && !audioContext) {
+                musicStarted = true;
+                document.removeEventListener('click', firstClickHandler);
+            }
+        }, { once: true, passive: true });
+
+        musicToggle.addEventListener('click', async function() {
+            // Resume AudioContext if suspended (Chrome/Safari autoplay policy)
+            if (audioContext && audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            
+            if (!musicPlayingTime) {
+                // START MUSIC
+                musicPlayingTime = Date.now();
+                musicToggle.textContent = '🔇';
+                musicToggle.classList.add('playing');
+                
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                playPartyMelody();
+            } else {
+                // STOP MUSIC
+                stopAllSounds();
+                musicToggle.textContent = '🎵';
+                musicToggle.classList.remove('playing');
+            }
+        });
+
+        // Visual feedback for music button hover
+        musicToggle.addEventListener('mouseenter', () => {
+            if (!musicPlayingTime) {
+                musicToggle.classList.add('music-hover');
+            }
+        });
+        musicToggle.addEventListener('mouseleave', () => {
+            musicToggle.classList.remove('music-hover');
+        });
+
+        function playPartyMelody() {
+            if (!musicPlayingTime || !audioContext || audioContext.state === 'suspended') return;
+            
+            let noteIndex = 0;
+            function playNextNote() {
+                if (!musicPlayingTime || !audioContext || audioContext.state === 'suspended') return;
+                
+                const note = partyMelody[noteIndex % partyMelody.length];
+                playRichNote(note.freq, note.dur);
+                noteIndex++;
+                currentTimeout = setTimeout(playNextNote, note.dur + 50);
+            }
+            playNextNote();
+        }
+
+        function playRichNote(freq, duration) {
+            if (!audioContext || audioContext.state === 'suspended') return;
+            
+            const now = audioContext.currentTime;
+            
+            // Main melody (sine wave - clean tone)
+            const osc1 = audioContext.createOscillator();
+            osc1.frequency.value = freq;
+            osc1.type = 'sine';
+            
+            const gain1 = audioContext.createGain();
+            gain1.gain.setValueAtTime(0, now);
+            gain1.gain.linearRampToValueAtTime(0.4, now + 0.02);
+            gain1.gain.exponentialRampToValueAtTime(0.01, now + duration/1000);
+            
+            // Harmony layer (slightly detuned triangle wave)
+            const osc2 = audioContext.createOscillator();
+            osc2.frequency.value = freq * 1.007;
+            osc2.type = 'triangle';
+            
+            const gain2 = audioContext.createGain();
+            gain2.gain.setValueAtTime(0, now);
+            gain2.gain.linearRampToValueAtTime(0.18, now + 0.05);
+            gain2.gain.exponentialRampToValueAtTime(0.01, now + duration/1000);
+            
+            // Bass/kick layer (randomized for rhythm)
+            if (Math.random() < 0.25) {
+                const bassOsc = audioContext.createOscillator();
+                bassOsc.frequency.value = freq * 0.5;
+                bassOsc.type = 'sine';
+                
+                const bassGain = audioContext.createGain();
+                bassGain.gain.setValueAtTime(0, now);
+                bassGain.gain.linearRampToValueAtTime(0.25, now + 0.01);
+                bassGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                
+                bassOsc.connect(bassGain);
+                bassGain.connect(audioContext.destination);
+                bassOsc.start(now);
+                oscillators.push(bassOsc);
+            }
+            
+            osc1.connect(gain1);
+            osc2.connect(gain2);
+            gain1.connect(audioContext.destination);
+            gain2.connect(audioContext.destination);
+            
+            osc1.start(now);
+            osc2.start(now);
+            
+            oscillators.push(osc1, osc2);
+        }
+
+        function stopAllSounds() {
+            oscillators.forEach(osc => {
+                try {
+                    if (osc.stop) osc.stop();
+                } catch(e) {}
+            });
+            oscillators = [];
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
+                currentTimeout = null;
+            }
+        }
+
+        // ACHIEVEMENT SYSTEM
+        function checkAchievements() {
+            const badges = [
+                {key: 'musicMaster', name: '🎵 Music Master (30s+)', check: () => {
+                    return musicPlayingTime && (Date.now() - musicPlayingTime) > 30000;
+                }},
+                {key: 'memoryChamp', name: '🧠 Memory Champion', check: () => memoryScore >= 80},
+                {key: 'triviaQueen', name: '💖 Soulmate Score (7+)', check: () => quizScore >= 7},
+                {key: 'secretUnlocked', name: '🔓 Secret Gallery', check: () => {
+                    return document.getElementById('secret-gallery').style.display !== 'none';
+                }}
+            ];
+            
+            badges.forEach(badge => {
+                if (badge.check() && !achievements[badge.key]) {
+                    achievements[badge.key] = true;
+                    showAchievement(badge.name);
+                    updateAchievementDisplay();
+                }
+            });
+        }
+
+        function showAchievement(name) {
+            const badge = document.createElement('div');
+            badge.className = 'achievement-badge';
+            badge.textContent = `🎉 ${name} Unlocked!`;
+            document.body.appendChild(badge);
+            setTimeout(() => badge.remove(), 4000);
+            triggerConfetti();
+        }
+
+        function updateAchievementDisplay() {
+            const badgeList = document.getElementById('badgeList');
+            const unlockedBadges = Object.entries(achievements)
+                .filter(([key, unlocked]) => unlocked)
+                .map(([key, unlocked]) => {
+                    const badgeNames = {
+                        musicMaster: '🎵 Music Master',
+                        memoryChamp: '🧠 Memory Champ', 
+                        triviaQueen: '💖 Soulmate',
+                        secretUnlocked: '🔓 Secret Keeper'
+                    };
+                    return badgeNames[key];
+                });
+            
+            if (unlockedBadges.length > 0) {
+                document.getElementById('achievements').style.display = 'block';
+                badgeList.innerHTML = unlockedBadges.map(name => 
+                    `<div class="badge">${name}</div>`
+                ).join('');
+            }
+        }
+
+        function isBirthdayTime() {
+            return new Date() >= BIRTHDAY_DATE;
+        }
+        
+        function updateSectionLocks() {
+            const sections = ['gallery', 'wishes', 'games'];
+            const navBtns = {
+                gallery: document.getElementById('galleryBtn'),
+                wishes: document.getElementById('wishesBtn'),
+                games: document.getElementById('gamesBtn')
+            };
+            
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                const navBtn = navBtns[sectionId];
+                
+                if (!isBirthdayTime()) {
+                    section.classList.add('locked');
+                    if (!section.querySelector('.locked-overlay')) {
+                        const overlay = document.createElement('div');
+                        overlay.className = 'locked-overlay';
+                        const daysLeft = Math.floor((BIRTHDAY_DATE - new Date()) / (1000*60*60*24));
+                        overlay.innerHTML = `
+                            <div class="lock-icon">🔒</div>
+                            <div class="lock-message">
+                                Locked until Birthday!<br>
+                                <span style="font-size:0.7em;font-weight:400">
+                                    ${daysLeft} days left ✨
+                                </span>
+                            </div>
+                        `;
+                        section.insertBefore(overlay, section.firstChild);
+                    }
+                    navBtn.classList.add('locked');
+                } else {
+                    section.classList.remove('locked');
+                    const overlay = section.querySelector('.locked-overlay');
+                    if (overlay) overlay.remove();
+                    navBtn.classList.remove('locked');
+                }
+            });
+        }
+
+        // ENHANCED SMOOTH SCROLL NAVIGATION
+        function showSection(sectionId, event) {
+            if (!isBirthdayTime() && sectionId !== 'home') {
+                triggerConfetti();
+                alert('🎉 Locked until Birthday! Come back on Jan 27th! 💖');
+                return;
+            }
+            
             document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(button => button.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             event.target.classList.add('active');
+            
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
             if (sectionId === 'home') triggerConfetti();
-            if (sectionId === 'games') {
-                setTimeout(initGames, 100); // Small delay to ensure DOM is ready
-            }
+            if (sectionId === 'games') setTimeout(() => {
+                initGames(); 
+                checkAchievements();
+            }, 300);
         }
         
         function createGallery() {
@@ -218,6 +510,13 @@
                 img.onclick = (e) => openModal(e.target);
                 img.onerror = () => img.classList.add('error');
                 publicGallery.appendChild(img);
+            }
+        }
+        
+        function preloadImages() {
+            for(let i = 1; i <= 40; i++) {
+                const img = new Image();
+                img.src = `images/memory${i}.jpg`;
             }
         }
         
@@ -243,19 +542,24 @@
         }
         
         function shareBirthday() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Happy Birthday Shree! 🎉',
-                    text: 'Check out this amazing birthday surprise! 💖',
-                    url: window.location.href
-                });
+            const shareData = {
+                title: 'Happy Birthday Shree! 🎉',
+                text: 'Check out this amazing birthday surprise! 💖',
+                url: window.location.href
+            };
+            
+            if (/Android|iPhone/i.test(navigator.userAgent)) {
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text + '\n' + shareData.url)}`, '_blank');
+            } else if (navigator.share) {
+                navigator.share(shareData);
             } else {
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert('🎉 Birthday link copied to clipboard! Share the love! 💕');
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    alert('🎉 Birthday link copied! 📋 Share on WhatsApp/Facebook! 💕');
                 }).catch(() => {
-                    alert('🎉 Birthday link: ' + window.location.href + '\nShare the love! 💕');
+                    prompt('Copy this link:', shareData.url);
                 });
             }
+            triggerConfetti();
         }
         
         function unlockSecret() {
@@ -264,13 +568,14 @@
                 document.getElementById('secret-gallery').style.display = 'block';
                 document.getElementById('secret-input').style.display = 'none';
                 triggerConfetti();
+                checkAchievements();
                 setTimeout(() => document.getElementById('secret-gallery').scrollIntoView({behavior: 'smooth'}), 500);
             } else {
                 input.value = '';
                 input.focus();
                 input.style.borderColor = '#ff6b6b';
                 setTimeout(() => input.style.borderColor = 'rgba(255,255,255,.4)', 1000);
-                alert('❌ Wrong code! Try: shree2026 💕');
+                alert('❌ Wrong code! Contact Pikai. 💕');
             }
         }
         
@@ -283,7 +588,7 @@
             triggerConfetti();
         }
         
-        // FIXED Memory Game with proper state management
+        // Memory Game (unchanged)
         function initMemoryGame() {
             memoryCanvas = document.getElementById('memoryGame');
             memoryCtx = memoryCanvas.getContext('2d');
@@ -301,20 +606,9 @@
                 memoryCtx.fillStyle = matched ? '#ffd700' : (flipped ? '#fff' : '#ff6b6b');
                 memoryCtx.fillRect(x, y, width, height);
                 
-                // Rounded corners
                 memoryCtx.lineWidth = 3;
                 memoryCtx.strokeStyle = '#fff';
-                memoryCtx.beginPath();
-                memoryCtx.moveTo(x+12, y);
-                memoryCtx.lineTo(x+width-12, y);
-                memoryCtx.quadraticCurveTo(x+width, y, x+width, y+12);
-                memoryCtx.lineTo(x+width, y+height-12);
-                memoryCtx.quadraticCurveTo(x+width, y+height, x+width-12, y+height);
-                memoryCtx.lineTo(x+12, y+height);
-                memoryCtx.quadraticCurveTo(x, y+height, x, y+height-12);
-                memoryCtx.lineTo(x, y+12);
-                memoryCtx.quadraticCurveTo(x, y, x+12, y);
-                memoryCtx.stroke();
+                memoryCtx.strokeRect(x, y, width, height);
                 
                 if (flipped || matched) {
                     memoryCtx.font = 'bold 36px Arial';
@@ -357,6 +651,7 @@
                                 memoryBoard[idx2].matched = true;
                                 memoryScore += 10;
                                 document.getElementById('memoryScore').textContent = `Score: ${memoryScore}`;
+                                checkAchievements();
                                 if (memoryScore >= 80) triggerConfetti();
                             } else {
                                 memoryBoard[idx1].flipped = false;
@@ -372,19 +667,22 @@
             document.getElementById('memoryScore').textContent = `Score: ${memoryScore}`;
         }
         
-        // FIXED Quiz Game with proper event management
+        // Quiz Game (unchanged)
         const quizQuestions = [
             {q: "Do you love me?", o1: "Yes 💕", o2: "No", a: 0},
             {q: "What's your favorite ice cream flavor?", o1: "Chocolate", o2: "Vanilla", a: 1},
             {q: "Best birthday gift ever?", o1: "Your love", o2: "iPhone", a: 0},
             {q: "Shree's dream destination?", o1: "Paris", o2: "Maldives", a: 0},
-            {q: "Puchur birth time?", o1: "Morning", o2: "Night", a: 1}
+            {q: "Puchur birth time?", o1: "Morning", o2: "Night", a: 1},
+            {q: "Favorite color?", o1: "Pink 💖", o2: "Blue", a: 0},
+            {q: "Our first date location?", o1: "Cafe", o2: "Park", a: 1},
+            {q: "Shree's favorite food?", o1: "Pizza", o2: "Pasta", a: 0}
         ];
         
         function initQuiz() {
             quizCurrent = 0;
             quizScore = 0;
-            document.getElementById('quizScore').textContent = 'Score: 0/5';
+            document.getElementById('quizScore').textContent = 'Score: 0/8';
             
             const quizGame = document.getElementById('quizGame');
             quizGame.innerHTML = `
@@ -404,8 +702,9 @@
             }
             quizCurrent++;
             document.getElementById('quizScore').textContent = `Score: ${quizScore}/${quizCurrent}`;
+            checkAchievements();
             
-            if(quizCurrent < 5) {
+            if(quizCurrent < 8) {
                 const quizGame = document.getElementById('quizGame');
                 quizGame.innerHTML = `
                     <p id="quizQuestion" style="color:#fff;font-size:clamp(1.3rem,4vw,1.5rem);margin-bottom:25px;">${quizQuestions[quizCurrent].q}</p>
@@ -415,17 +714,16 @@
                 document.getElementById('quizBtn1').onclick = () => quizAnswer(0);
                 document.getElementById('quizBtn2').onclick = () => quizAnswer(1);
             } else {
-                const message = quizScore >= 4 ? '💖 Perfect! You know me so well! 💕' : 
-                               quizScore >= 3 ? '🌟 Great job! 🎉' : '💕 Sweet effort! Try again!';
+                const message = quizScore >= 7 ? '💖 Perfect! You know me so well! 💕' : 
+                               quizScore >= 5 ? '🌟 Great job! 🎉' : '💕 Sweet effort! Try again!';
                 document.getElementById('quizGame').innerHTML = `
                     <h3 style="color:var(--g);font-size:clamp(1.5rem,5vw,2rem);">${message}</h3>
-                    <p style="color:#fff;font-size:1.3rem;margin:20px 0;">Final Score: ${quizScore}/5 ⭐</p>
+                    <p style="color:#fff;font-size:1.3rem;margin:20px 0;">Final Score: ${quizScore}/8 ⭐</p>
                     <button class="cb small" onclick="initQuiz()" style="margin-top:20px;">Play Again 💖</button>
                 `;
             }
         }
         
-        // FIXED Reset Function - Now works perfectly!
         function resetGames() {
             memoryScore = 0;
             quizCurrent = 0;
@@ -433,22 +731,18 @@
             memoryFlipped = [];
             
             document.getElementById('memoryScore').textContent = 'Score: 0';
-            document.getElementById('quizScore').textContent = 'Score: 0/5';
+            document.getElementById('quizScore').textContent = 'Score: 0/8';
             
             initMemoryGame();
             initQuiz();
             triggerConfetti();
+            checkAchievements();
         }
         
         function initGames() {
             initMemoryGame();
             initQuiz();
         }
-        
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('resetBtn').addEventListener('click', resetGames);
-        });
         
         function createHeart() {
             const heart = document.createElement('div');
@@ -470,16 +764,31 @@
             setTimeout(() => sparkle.remove(), 4000);
         }
         
+        // Initialize everything
         window.addEventListener('load', function() {
+            preloadImages();
             createGallery();
             updateCountdown();
             setInterval(updateCountdown, 1000);
             setInterval(createHeart, 300);
             setInterval(createSparkle, 500);
+            setInterval(checkAchievements, 5000);
             
+            updateSectionLocks();
+            setInterval(updateSectionLocks, 60000);
+            
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.onclick = (e) => showSection(btn.dataset.section, e);
+            });
+            
+            document.getElementById('resetBtn').onclick = resetGames;
             document.getElementById('secret-code').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') unlockSecret();
             });
+
+            if (isBirthdayTime()) {
+                setTimeout(() => musicToggle.click(), 1500);
+            }
         });
     </script>
 </body>
